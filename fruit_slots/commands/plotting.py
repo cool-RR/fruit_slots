@@ -5,23 +5,19 @@ import sys
 import itertools
 import warnings
 import functools
-warnings.filterwarnings('ignore')
 
 import pathlib
-
-# Avoid TensorFlow spam:
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
-os.environ['CUDA_VISIBLE_DEVICES'] = '0'
-logging.getLogger('tensorflow').addFilter(
-    lambda record: 'Tracing is expensive and the excessive' not in record.msg
-)
 
 import click
 import pandas as pd
 
+from fruit_slots import utils
+from . import cli
+
 
 
 def get_dataframe(tensorboard_log_path):
+    utils.prevent_tensorflow_spam()
     import tensorflow.compat.v1.logging
     tensorflow.compat.v1.logging.set_verbosity(tensorflow.compat.v1.logging.ERROR)
     from tensorflow.python.summary.summary_iterator import summary_iterator
@@ -41,33 +37,28 @@ def get_dataframe(tensorboard_log_path):
     df = pd.DataFrame.from_records(records, columns=columns, index='step')
     return df
 
-@click.group()
-def post_fruitos():
-    pass
+
+all_columns = (
+    'rollout/mean_cumulative_visible_apple_reward',
+    'rollout/mean_cumulative_invisible_apple_reward',
+    'rollout/mean_cumulative_banana_reward',
+    'rollout/mean_cumulative_lemon_reward',
+)
 
 
-@post_fruitos.command()
-@click.argument('tensorboard_log_path',
-                type=click.Path(exists=True, dir_okay=False, resolve_path=True))
-def make_csv(tensorboard_log_path):
-    df = get_dataframe(tensorboard_log_path)
-    df.to_csv(sys.stdout)
-
-
-@post_fruitos.command()
-@click.argument('csv_path', type=click.Path(exists=True, dir_okay=False, resolve_path=True))
-def make_chart(csv_path):
+@cli.command()
+@click.argument('tensorboard_log_path', type=str, default='')
+def make_chart(tensorboard_log_path):
     import plotly.graph_objects as go
-
-    df = pd.read_csv(csv_path)[:15000]
-    columns = (
-        # These are ordered by the phases of the experiment
-        # 'rollout/mean_cumulative_reward',
-        'rollout/mean_cumulative_visible_apple_reward',
-        'rollout/mean_cumulative_invisible_apple_reward',
-        'rollout/mean_cumulative_banana_reward',
-        'rollout/mean_cumulative_lemon_reward',
-    )
+    if tensorboard_log_path == '':
+        recent_tensorboard_log_folder = max(utils.log_path.iterdir(),
+                                            key=lambda path: path.stat().st_mtime)
+        (tensorboard_log_path,) = recent_tensorboard_log_folder.iterdir()
+    else:
+        tensorboard_log_path = pathlib.Path(tensorboard_log_path)
+    print(f'Making a chart for {tensorboard_log_path}')
+    df = get_dataframe(tensorboard_log_path)
+    columns = tuple(column for column in all_columns if column in df.columns)
     process_column_name = lambda name: (
         name.replace('rollout/mean_cumulative_', '').replace('_', ' ').capitalize()
     )
@@ -87,10 +78,6 @@ def make_chart(csv_path):
                     'y': 0, 'font': {'size': 30}}
         )
     )
-    figure.update_xaxes
-    figure.show('browser')
+    figure.show()
 
-
-if __name__ == '__main__':
-    post_fruitos()
 

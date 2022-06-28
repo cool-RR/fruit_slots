@@ -49,13 +49,15 @@ proj.directory-list = [{'dirloc': None,
                         'recursive': True,
                         'watch_for_changes': True},
                        {'dirloc': loc('../..'),
-                        'excludes': (),
-                        'filter': u'*',
+                        'excludes': [u'fruit_slots.egg-info',
+                                     u'dist',
+                                     u'build'],
+                        'filter': '*',
                         'include_hidden': False,
                         'recursive': True,
                         'watch_for_changes': True}]
 proj.file-type = 'shared'
-proj.main-file = loc('../../grump.py')
+proj.main-file = loc('../../fruit_slots/__main__.py')
 proj.shared-attribute-names = ['-proj.launch-config',
                                '-console.toolbox']
 testing.auto-test-file-specs = (('regex',

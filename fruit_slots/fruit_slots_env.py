@@ -1,3 +1,6 @@
+# Copyright 2022 Ram Rachum and collaborators.
+# This program is distributed under the MIT license.
+
 import random
 
 import numpy as np
@@ -24,16 +27,28 @@ class FruitSlotsEnv(pettingzoo.ParallelEnv):
         "render_fps": 2,
     }
 
-    custom_metrics = (
-        'cumulative_reward',
-        'cumulative_visible_apple_reward',
-        'cumulative_invisible_apple_reward',
-        'cumulative_banana_reward',
-        'cumulative_lemon_reward',
-    )
+    @staticmethod
+    def make_and_wrap(*, produce_bananas=True, produce_lemons=True, is_parallel=False):
+        import supersuit as ss
+        import stable_baselines3
+
+        env = original_env = FruitSlotsEnv(
+            produce_bananas=produce_bananas, produce_lemons=produce_lemons
+        )
+        env = ss.pettingzoo_env_to_vec_env_v1(env)
+        if is_parallel:
+            env = ss.concat_vec_envs_v1(env, 8, num_cpus=4, base_class='stable_baselines3')
+        else:
+            env = ss.concat_vec_envs_v1(env, 1, num_cpus=1, base_class='stable_baselines3')
+        env = stable_baselines3.common.vec_env.VecMonitor(
+            env,
+            info_keywords=(original_env.custom_metrics + ('loggable_metrics',))
+        )
+        env.original_env = env
+        return env
 
 
-    def __init__(self, produce_bananas=True, produce_lemons=True):
+    def __init__(self, *, produce_bananas=True, produce_lemons=True):
         if produce_lemons:
             assert produce_bananas
         self.produce_bananas = produce_bananas
@@ -44,6 +59,14 @@ class FruitSlotsEnv(pettingzoo.ParallelEnv):
                                                  dtype=bool)
         self.action_spaces = {name: self._action_space for name in self.possible_agents}
         self.observation_spaces = {name: self._observation_space for name in self.possible_agents}
+        self.custom_metrics = (
+            'cumulative_reward',
+            'cumulative_visible_apple_reward',
+            'cumulative_invisible_apple_reward',
+            *(('cumulative_banana_reward',) if produce_bananas else ()),
+            *(('cumulative_lemon_reward',) if produce_lemons else ()),
+        )
+
         self.reset()
 
 
@@ -259,9 +282,10 @@ class FruitSlotsEnv(pettingzoo.ParallelEnv):
             for lemon_location in lemon_locations:
                 result[i_agent][lemon_location] = 'L'
 
-        horizontal_line = '-' * (N_SLOTS + 2)
-        return (horizontal_line + '\n|' + ''.join(result[0]) + '|\n|' + ''.join(result[1]) +
-                '|\n' + horizontal_line)
+        top_horizontal_line = '/' + '-' * N_SLOTS + '\\'
+        bottom_horizontal_line = '\\' + '-' * N_SLOTS + '/'
+        return (top_horizontal_line + '\n|' + ''.join(result[0]) + '|\n|' + ''.join(result[1]) +
+                '|\n' + bottom_horizontal_line)
 
 
     def close(self):
