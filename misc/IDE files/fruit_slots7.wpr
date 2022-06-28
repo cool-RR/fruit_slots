@@ -1,0 +1,63 @@
+#!wing
+#!version=7.0
+##################################################################
+# Wing project file                                              #
+##################################################################
+[project attributes]
+debug.launch-configs = (2,
+                        {'launch-IIDrnhn5DD156IKv': ({},
+        {'buildcmd': ('project',
+                      None),
+         'env': ('project',
+                 [u'']),
+         'name': 'Pytest Launch Config',
+         'pyexec': ('project',
+                    u''),
+         'pypath': ('project',
+                    []),
+         'pyrunargs': ('project',
+                       '-u'),
+         'runargs': u'',
+         'rundir': ('custom',
+                    u'h:\\smoky')}),
+                         'launch-LxNNmgle62UbDcCC': ({},
+        {'buildcmd': ('project',
+                      None),
+         'env': ('project',
+                 [u'']),
+         'name': 'Foo',
+         'pyexec': ('remote',
+                    'Cockbuntu'),
+         'pypath': ('project',
+                    []),
+         'pyrunargs': ('project',
+                       '-u'),
+         'runargs': u'',
+         'rundir': ('project',
+                    u'')})})
+debug.named-entry-points = (1,
+                            {'Entry Point': ({},
+        {'auto-show': False,
+         'launch-id': ('project',
+                       (u'',
+                        '')),
+         'loc': loc('../../sheez.py')})})
+proj.directory-list = [{'dirloc': None,
+                        'excludes': [],
+                        'filter': '*',
+                        'include_hidden': False,
+                        'recursive': True,
+                        'watch_for_changes': True},
+                       {'dirloc': loc('../..'),
+                        'excludes': (),
+                        'filter': u'*',
+                        'include_hidden': False,
+                        'recursive': True,
+                        'watch_for_changes': True}]
+proj.file-type = 'shared'
+proj.main-file = loc('../../grump.py')
+proj.shared-attribute-names = ['-proj.launch-config',
+                               '-console.toolbox']
+testing.auto-test-file-specs = (('regex',
+                                 'marley/tests.*/test[^./]*.py.?$'),)
+testing.test-framework = {None: ':internal pytest'}

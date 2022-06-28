@@ -1,0 +1,6 @@
+PettingZoo==1.19.0
+SuperSuit==3.4.0
+click>=8.1.3
+gym==0.22.0
+numpy>=1.23.0
+stable-baselines3==1.5.0 # This one might try to install a different version of Gym
