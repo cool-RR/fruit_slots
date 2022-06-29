@@ -5,5 +5,5 @@ gym==0.22.0
 numpy>=1.23.0
 plotly==5.9.0
 rigged_sb3
-tensorboard==2.9.1
-tensorflow==2.9.1
+tensorboard==2.6.0
+tensorflow==2.6.0
