@@ -6,3 +6,4 @@ numpy>=1.23.0
 plotly==5.9.0
 rigged_sb3
 tensorboard==2.9.1
+tensorflow==2.9.1
