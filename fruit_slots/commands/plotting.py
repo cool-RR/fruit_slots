@@ -18,8 +18,6 @@ from . import cli
 
 def get_dataframe(tensorboard_log_path):
     utils.prevent_tensorflow_spam()
-    import tensorflow.compat.v1.logging
-    tensorflow.compat.v1.logging.set_verbosity(tensorflow.compat.v1.logging.ERROR)
     from tensorflow.python.summary.summary_iterator import summary_iterator
 
     events = tuple(summary_iterator(str(tensorboard_log_path)))
