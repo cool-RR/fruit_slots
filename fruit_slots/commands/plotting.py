@@ -46,7 +46,7 @@ all_columns = (
 
 @cli.command()
 @click.argument('tensorboard_log_path', type=str, default='')
-def make_chart(tensorboard_log_path):
+def plot(tensorboard_log_path):
     import plotly.graph_objects as go
     if tensorboard_log_path == '':
         recent_tensorboard_log_folder = max(utils.log_path.iterdir(),
@@ -54,7 +54,7 @@ def make_chart(tensorboard_log_path):
         (tensorboard_log_path,) = recent_tensorboard_log_folder.iterdir()
     else:
         tensorboard_log_path = pathlib.Path(tensorboard_log_path)
-    print(f'Making a chart for {tensorboard_log_path}')
+    print(f'Making a plot for {tensorboard_log_path}')
     df = get_dataframe(tensorboard_log_path)
     columns = tuple(column for column in all_columns if column in df.columns)
     process_column_name = lambda name: (
