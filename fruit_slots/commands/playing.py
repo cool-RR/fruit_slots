@@ -22,7 +22,7 @@ from . import cli
 @cli.command()
 @click.option('--bananas/--no-bananas', 'produce_bananas', default=True)
 @click.option('--lemons/--no-lemons', 'produce_lemons', default=True)
-def play_single(*, produce_bananas, produce_lemons):
+def play(*, produce_bananas, produce_lemons):
     from fruit_slots.fruit_slots_env import FruitSlotsEnv
     env = FruitSlotsEnv(produce_bananas=produce_bananas, produce_lemons=produce_lemons)
     model = utils.load_model(produce_bananas=produce_bananas, produce_lemons=produce_lemons)

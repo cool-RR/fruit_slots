@@ -25,13 +25,13 @@ pip3 install fruit_slots
 Train an agent and save its policy to your home folder:
 
 ```shell
-python3 -m fruit_slots train-single
+python3 -m fruit_slots train
 ```
 
 Show Fruit Slots gameplay on the agent you just trained:
 
 ```shell
-python3 -m fruit_slots play-single
+python3 -m fruit_slots play
 ```
 
 Make a plot showing the learning curves for the agent you just trained:
@@ -51,5 +51,5 @@ python -m fruit_slots --help
 Show arguments and options for a specific command:
 
 ```shell
-python -m fruit_slots train-single --help
+python -m fruit_slots train --help
 ```

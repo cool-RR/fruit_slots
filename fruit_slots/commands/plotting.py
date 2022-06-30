@@ -1,3 +1,6 @@
+# Copyright 2022 Ram Rachum and collaborators.
+# This program is distributed under the MIT license.
+
 import random
 import os
 import logging

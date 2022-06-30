@@ -61,5 +61,5 @@ proj.main-file = loc('../../fruit_slots/__main__.py')
 proj.shared-attribute-names = ['-proj.launch-config',
                                '-console.toolbox']
 testing.auto-test-file-specs = (('regex',
-                                 'marley/tests.*/test[^./]*.py.?$'),)
+                                 'fruit_slots/tests.*/test[^./]*.py.?$'),)
 testing.test-framework = {None: ':internal pytest'}

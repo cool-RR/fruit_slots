@@ -29,7 +29,7 @@ if False:
 @click.option('--lemons/--no-lemons', 'produce_lemons', default=True)
 @click.option('-t', '--total-timesteps', default=1_000_000)
 @click.option('-v', '--verbose', default=False, is_flag=True)
-def train_single(*, is_parallel, produce_bananas, produce_lemons, total_timesteps, verbose):
+def train(*, is_parallel, produce_bananas, produce_lemons, total_timesteps, verbose):
     import stable_baselines3
     from fruit_slots.fruit_slots_env import FruitSlotsEnv
     utils.prevent_tensorflow_spam()
