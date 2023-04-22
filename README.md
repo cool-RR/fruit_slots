@@ -2,7 +2,7 @@
 
 * [Paper](http://r.rachum.com/fruit-slots-paper)
 * [Video](http://r.rachum.com/fruit-slots-workshop-video)
-* [Slides](http://r.rachum.com/fruit-slots-slides)
+* [Deck](http://r.rachum.com/fruit-slots-deck)
 
 ## Paper abstract
 
